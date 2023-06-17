@@ -15,7 +15,7 @@ namespace Student.API.Data
             _dbContext = dbContext;
         }
         [HttpPost]
-        public IActionResult Post(Studentt student)
+        public IActionResult Post(Entities.Student student)
         {
             var studentt = _dbContext.Students.Add(student);
 
@@ -48,7 +48,7 @@ namespace Student.API.Data
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Put(long id,Studentt student) 
+        public IActionResult Put(long id, Entities.Student student) 
         {
             var studentToUpdate = _dbContext.Students.Find(id);
             if(studentToUpdate==null) { return NotFound();}
