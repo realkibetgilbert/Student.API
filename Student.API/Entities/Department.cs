@@ -8,6 +8,8 @@
 
         public string Description { get; set; }
 
+        public long schoolId { get; set; }
+        public School School { get; set; }
         public List<Course> Courses { get; set; }
 
     }

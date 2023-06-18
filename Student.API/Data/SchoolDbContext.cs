@@ -16,6 +16,25 @@ namespace Student.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<StudentCourse>().HasKey(sc => new {sc.CourseId,sc.StudentId});
+
+            modelBuilder.Entity<College>()
+                .HasMany(s=>s.SchoolList)
+                .WithOne(s=>s.College)
+                .HasForeignKey(s=>s.CollegeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Entities.School>()
+                .HasMany(s => s.Departments)
+                .WithOne(s => s.School)
+                .HasForeignKey(s => s.schoolId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Department>()
+                .HasMany(d => d.Courses)
+                .WithOne(d => d.Department)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+                
         }
 
     }
