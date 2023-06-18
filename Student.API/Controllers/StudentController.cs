@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Student.API.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Student.API.Data
 {

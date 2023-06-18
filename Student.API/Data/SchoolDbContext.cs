@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SchoolMangement.API.Entities;
 using Student.API.Entities;
 
 namespace Student.API.Data
@@ -9,8 +10,10 @@ namespace Student.API.Data
         {
         }
 
+        public DbSet<College> Colleges { get; set; }
         public DbSet<Entities.Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Lecture> Lectures { get; set; }
         public DbSet<StudentCourse> StudentCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,9 +21,9 @@ namespace Student.API.Data
             modelBuilder.Entity<StudentCourse>().HasKey(sc => new {sc.CourseId,sc.StudentId});
 
             modelBuilder.Entity<College>()
-                .HasMany(s=>s.SchoolList)
-                .WithOne(s=>s.College)
-                .HasForeignKey(s=>s.CollegeId)
+                .HasMany(s => s.SchoolList)
+                .WithOne(s => s.College)
+                .HasForeignKey(s => s.CollegeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Entities.School>()
