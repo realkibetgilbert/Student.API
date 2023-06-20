@@ -11,6 +11,7 @@ namespace Student.API.Data
         }
 
         public DbSet<College> Colleges { get; set; }
+        public DbSet<Entities.School> Schools { get; set; }
         public DbSet<Entities.Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
