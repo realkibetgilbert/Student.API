@@ -8,6 +8,7 @@
 
         public string Description { get; set; }
 
-        public List<School> SchoolList { get; set;}
+        public List<School> Schools { get; set;}
+        
     }
 }

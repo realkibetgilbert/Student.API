@@ -18,7 +18,7 @@ namespace School.API.Controllers
             _context = context;
         }
         [HttpPost]
-    
+
         public IActionResult Post(CollegeToAddDto college)
         {
             var collegeToAdd = new College
@@ -36,8 +36,8 @@ namespace School.API.Controllers
         }
 
         [HttpGet]
-       
-        public IActionResult Get() 
+
+        public IActionResult Get()
         {
             var colleges = _context.Colleges.ToList();
 
@@ -53,12 +53,13 @@ namespace School.API.Controllers
         {
             var college = _context.Colleges.Find(id);
 
-            if (college== null) { return NotFound(); }
+            if (college == null) { return NotFound(); }
 
             return Ok(college);
         }
         [HttpPut]
-        public IActionResult Put( long id,  CollegeToAddDto collegeToAddDto)
+        [Route("{id}")]
+        public IActionResult Put(long id, CollegeToAddDto collegeToAddDto)
         {
             var collegeToUpdate = _context.Colleges.Find(id);
             if (collegeToUpdate == null) { return NotFound(); }
@@ -69,7 +70,17 @@ namespace School.API.Controllers
             _context.SaveChanges();
 
             return Ok(collegeToUpdate);
-           
+
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromRoute] long id)
+        {
+            var collegeToDelete = _context.Colleges.Find(id);
+            if (collegeToDelete == null) { return NotFound(); } 
+            _context.Remove(collegeToDelete);   
+            _context.SaveChanges();
+            return Ok(collegeToDelete); 
         }
     }
 }

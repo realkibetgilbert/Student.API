@@ -1,4 +1,7 @@
-﻿namespace SchoolMangement.API.Entities
+﻿using Student.API.Entities;
+
+namespace SchoolMangement.API.Entities
+                                                                                                
 {
     public class Lecture
     {
@@ -11,5 +14,9 @@
         public double Salary { get; set; }
 
         public DateTime DateOfJoin { get; set; }
+        public long DepartmentId { get; set; }
+        public Department Department { get; set; }
+        public IList<CourseLecturer> Courses { get; set; }
+
     }
 }

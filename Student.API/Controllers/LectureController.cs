@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolMangement.API.Dtos;
+using SchoolMangement.API.Dtos.Course;
 using SchoolMangement.API.Entities;
 using Student.API.Data;
 
-namespace SchoolMangement.API.Controllers
+ namespace SchoolMangement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,30 +19,49 @@ namespace SchoolMangement.API.Controllers
             _context = context;
         }
         [HttpPost]
-        public IActionResult Post(LectureToAddDto lectureToAddDto)
+
+        public IActionResult Post(LectureToAddDto lecturerToAdd)
         {
-            //MAP LECTURE TO ADD DTO TO LECTURE
 
-            var lectureToAdd = new Lecture
-            { 
-                Name = lectureToAddDto.Name,
-                Description= lectureToAddDto.Description,
-                Salary = lectureToAddDto.Salary,
-                DateOfJoin= DateTime.Now,   
+            var name = lecturerToAdd.DepartmentName;
+
+            var trimmedName = name.Trim();
+
+            var department = _context.Departments.FirstOrDefault(c => c.Name == trimmedName);
 
 
-            };
+            if (department != null)
+            {
+
+                var DepartmentId = department.Id;
+
+                //map dto to entity
+                var lecturer = new Lecture
+                {
+                    Name = lecturerToAdd.Name,
+                    Description=lecturerToAdd.Description,
+
+                    Salary=lecturerToAdd.Salary,
+                    DateOfJoin=lecturerToAdd.DateOfJoin,
+
+                    DepartmentId = department.Id
+                };
+
+                var lecturers = _context.Lectures.Add(lecturer);
 
 
+                _context.SaveChanges();
 
-            _context.Lectures.Add(lectureToAdd);
+                return Ok(lecturers);
 
-            _context.SaveChanges();
-
-            return Ok();
+            }
+            return BadRequest();
         }
 
-        //get alll
+
+
+
+        //get all
         [HttpGet]
         public IActionResult Get()
         {
@@ -105,4 +125,4 @@ namespace SchoolMangement.API.Controllers
         }
 
     }
-}
+};

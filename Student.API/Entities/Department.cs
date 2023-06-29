@@ -1,4 +1,6 @@
-﻿namespace Student.API.Entities
+﻿using SchoolMangement.API.Entities;
+
+namespace Student.API.Entities
 {
     public class Department
     {
@@ -8,9 +10,9 @@
 
         public string Description { get; set; }
 
-        public long schoolId { get; set; }
+        public long SchoolId { get; set; }
         public School School { get; set; }
         public List<Course> Courses { get; set; }
-
+        public List<Lecture> Lectures { get; set; }
     }
 }

@@ -6,40 +6,49 @@ namespace Student.API.Data
 {
     public class SchoolDbContext : DbContext
     {
+        internal static object Entities;
+
         public SchoolDbContext(DbContextOptions options) : base(options)
         {
         }
 
         public DbSet<College> Colleges { get; set; }
+
+        
         public DbSet<Entities.School> Schools { get; set; }
-        public DbSet<Entities.Student> Students { get; set; }
-        public DbSet<Course> Courses { get; set; }
+        public DbSet<Department> Departments { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Entities.Student> Students { get; set; }
+       
+       
+
         public DbSet<StudentCourse> StudentCourses { get; set; }
+        public DbSet<CourseLecturer> CourseLecturers { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<StudentCourse>().HasKey(sc => new {sc.CourseId,sc.StudentId});
+            modelBuilder.Entity<StudentCourse>().HasKey(sc => new { sc.CourseId, sc.StudentId });
 
-            modelBuilder.Entity<College>()
-                .HasMany(s => s.SchoolList)
-                .WithOne(s => s.College)
-                .HasForeignKey(s => s.CollegeId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<CourseLecturer>().HasKey(sc => new { sc.CourseId, sc.LectureId });
 
-            modelBuilder.Entity<Entities.School>()
-                .HasMany(s => s.Departments)
-                .WithOne(s => s.School)
-                .HasForeignKey(s => s.schoolId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<StudentCourse>().HasNoKey();
 
-            modelBuilder.Entity<Department>()
-                .HasMany(d => d.Courses)
-                .WithOne(d => d.Department)
-                .HasForeignKey(d => d.DepartmentId)
-                .OnDelete(DeleteBehavior.Cascade);
-                
+            //modelBuilder.Entity<CourseLecturer>().HasNoKey();
+
+            modelBuilder.Entity<College>().HasMany(S => S.Schools).WithOne(C => C.College);
+
+            modelBuilder.Entity<Entities.School>().HasOne(C => C.College).WithMany(S => S.Schools);
+
+            modelBuilder.Entity<Department>().HasMany(C => C.Courses).WithOne(D => D.Department);
+
+            modelBuilder.Entity<Department>().HasMany(C => C.Lectures).WithOne(D => D.Department);
+
+            modelBuilder.Entity<Entities.Course>().HasMany(C => C.Students).WithOne(D => D.Course);
         }
 
+
     }
+
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Student.API.Data;
 
@@ -11,9 +12,10 @@ using Student.API.Data;
 namespace Student.API.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230624215550_New Migratuion")]
+    partial class NewMigratuion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace Student.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("SchoolMangement.API.Entities.CourseLecturer", b =>
-                {
-                    b.Property<long>("CourseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("LectureId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CourseId", "LectureId");
-
-                    b.HasIndex("LectureId");
-
-                    b.ToTable("CourseLecturers");
-                });
 
             modelBuilder.Entity("SchoolMangement.API.Entities.Lecture", b =>
                 {
@@ -45,14 +32,8 @@ namespace Student.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long?>("CourseId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("DateOfJoin")
                         .HasColumnType("datetime2");
-
-                    b.Property<long>("DepartmentId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -64,10 +45,6 @@ namespace Student.API.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Lectures");
                 });
@@ -99,29 +76,8 @@ namespace Student.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<long>("DepartmentId")
+                    b.Property<long?>("LectureId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("Student.API.Entities.Department", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -131,12 +87,14 @@ namespace Student.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LectureId");
+
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("Student.API.Entities.School", b =>
+            modelBuilder.Entity("Student.API.Entities.Department", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,6 +115,30 @@ namespace Student.API.Migrations
 
                     b.HasIndex("CollegeId");
 
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("Student.API.Entities.School", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
                     b.ToTable("Schools");
                 });
 
@@ -167,9 +149,6 @@ namespace Student.API.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<long?>("CourseId")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("DateOfJoin")
                         .HasColumnType("datetime2");
@@ -185,8 +164,6 @@ namespace Student.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.ToTable("Students");
                 });
 
@@ -198,6 +175,9 @@ namespace Student.API.Migrations
                     b.Property<long>("StudentId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("StudentName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CourseId", "StudentId");
 
                     b.HasIndex("StudentId");
@@ -205,55 +185,14 @@ namespace Student.API.Migrations
                     b.ToTable("StudentCourses");
                 });
 
-            modelBuilder.Entity("SchoolMangement.API.Entities.CourseLecturer", b =>
-                {
-                    b.HasOne("Student.API.Entities.Course", "Course")
-                        .WithMany("courseLecturers")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolMangement.API.Entities.Lecture", "Lecture")
-                        .WithMany("Courses")
-                        .HasForeignKey("LectureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Lecture");
-                });
-
-            modelBuilder.Entity("SchoolMangement.API.Entities.Lecture", b =>
-                {
-                    b.HasOne("Student.API.Entities.Course", null)
-                        .WithMany("Lectures")
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("Student.API.Entities.Department", "Department")
-                        .WithMany("Lectures")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-                });
-
             modelBuilder.Entity("Student.API.Entities.Course", b =>
                 {
-                    b.HasOne("Student.API.Entities.Department", "Department")
-                        .WithMany("Courses")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("SchoolMangement.API.Entities.Lecture", null)
+                        .WithMany("courses")
+                        .HasForeignKey("LectureId");
 
-                    b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("Student.API.Entities.Department", b =>
-                {
                     b.HasOne("Student.API.Entities.School", "School")
-                        .WithMany("Departments")
+                        .WithMany("Course")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -261,10 +200,10 @@ namespace Student.API.Migrations
                     b.Navigation("School");
                 });
 
-            modelBuilder.Entity("Student.API.Entities.School", b =>
+            modelBuilder.Entity("Student.API.Entities.Department", b =>
                 {
                     b.HasOne("Student.API.Entities.College", "College")
-                        .WithMany("Schools")
+                        .WithMany("DepartmentList")
                         .HasForeignKey("CollegeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -272,17 +211,21 @@ namespace Student.API.Migrations
                     b.Navigation("College");
                 });
 
-            modelBuilder.Entity("Student.API.Entities.Student", b =>
+            modelBuilder.Entity("Student.API.Entities.School", b =>
                 {
-                    b.HasOne("Student.API.Entities.Course", null)
-                        .WithMany("Students")
-                        .HasForeignKey("CourseId");
+                    b.HasOne("Student.API.Entities.Department", "Department")
+                        .WithMany("Schools")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Student.API.Entities.StudentCourse", b =>
                 {
                     b.HasOne("Student.API.Entities.Course", "Course")
-                        .WithMany("studentCourses")
+                        .WithMany("Courses")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -300,35 +243,27 @@ namespace Student.API.Migrations
 
             modelBuilder.Entity("SchoolMangement.API.Entities.Lecture", b =>
                 {
-                    b.Navigation("Courses");
+                    b.Navigation("courses");
                 });
 
             modelBuilder.Entity("Student.API.Entities.College", b =>
                 {
-                    b.Navigation("Schools");
+                    b.Navigation("DepartmentList");
                 });
 
             modelBuilder.Entity("Student.API.Entities.Course", b =>
                 {
-                    b.Navigation("Lectures");
-
-                    b.Navigation("Students");
-
-                    b.Navigation("courseLecturers");
-
-                    b.Navigation("studentCourses");
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("Student.API.Entities.Department", b =>
                 {
-                    b.Navigation("Courses");
-
-                    b.Navigation("Lectures");
+                    b.Navigation("Schools");
                 });
 
             modelBuilder.Entity("Student.API.Entities.School", b =>
                 {
-                    b.Navigation("Departments");
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("Student.API.Entities.Student", b =>
