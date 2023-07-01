@@ -13,6 +13,6 @@ namespace Student.API.Entities
         public long SchoolId { get; set; }
         public School School { get; set; }
         public List<Course> Courses { get; set; }
-        public List<Lecture> Lectures { get; set; }
+      
     }
 }

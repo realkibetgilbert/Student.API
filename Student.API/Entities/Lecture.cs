@@ -14,8 +14,8 @@ namespace SchoolMangement.API.Entities
         public double Salary { get; set; }
 
         public DateTime DateOfJoin { get; set; }
-        public long DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public long CollegeId { get; set; }
+        public College College { get; set; }
         public IList<CourseLecturer> Courses { get; set; }
 
     }

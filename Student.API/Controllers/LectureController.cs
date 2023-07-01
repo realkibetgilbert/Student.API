@@ -23,17 +23,17 @@ using Student.API.Data;
         public IActionResult Post(LectureToAddDto lecturerToAdd)
         {
 
-            var name = lecturerToAdd.DepartmentName;
+            var name = lecturerToAdd.CollegeName;
 
             var trimmedName = name.Trim();
 
-            var department = _context.Departments.FirstOrDefault(c => c.Name == trimmedName);
+            var college = _context.Colleges.FirstOrDefault(c => c.Name == trimmedName);
 
 
-            if (department != null)
+            if (college!= null)
             {
 
-                var DepartmentId = department.Id;
+                var CollegeId = college.Id;
 
                 //map dto to entity
                 var lecturer = new Lecture
@@ -44,7 +44,7 @@ using Student.API.Data;
                     Salary=lecturerToAdd.Salary,
                     DateOfJoin=lecturerToAdd.DateOfJoin,
 
-                    DepartmentId = department.Id
+                    CollegeId = college.Id
                 };
 
                 var lecturers = _context.Lectures.Add(lecturer);

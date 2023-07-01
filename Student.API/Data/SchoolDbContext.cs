@@ -43,7 +43,7 @@ namespace Student.API.Data
 
             modelBuilder.Entity<Department>().HasMany(C => C.Courses).WithOne(D => D.Department);
 
-            modelBuilder.Entity<Department>().HasMany(C => C.Lectures).WithOne(D => D.Department);
+            modelBuilder.Entity<College>().HasMany(C => C.Lectures).WithOne(D => D.College);
 
             modelBuilder.Entity<Entities.Course>().HasMany(C => C.Students).WithOne(D => D.Course);
         }
